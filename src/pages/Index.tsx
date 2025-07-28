@@ -1,196 +1,178 @@
 import { useState, useMemo } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedGrade, setSelectedGrade] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const catBreeds = [
+  const subjects = [
     {
       id: 1,
-      name: 'Персидская кошка',
-      category: 'persian',
-      image: '/img/d87dcdb5-26d1-473a-bf4c-a294328d1d13.jpg',
-      description: 'Персидские кошки известны своей длинной шелковистой шерстью и спокойным характером.',
-      traits: ['Длинная шерсть', 'Спокойный', 'Ласковый'],
-      origin: 'Иран',
-      size: 'Средний'
+      name: 'Математика',
+      icon: 'Calculator',
+      color: 'bg-blue-500',
+      grades: [6, 7, 8, 9],
+      description: 'Алгебра, геометрия, решения задач и примеров',
+      image: '/img/66f765ea-6cb3-40a4-9fd1-089b9c5de0dd.jpg',
+      tasks: 245
     },
     {
       id: 2,
-      name: 'Сфинкс',
-      category: 'exotic',
-      image: '/img/19a495bd-f098-486f-abdf-60964b380d5c.jpg',
-      description: 'Сфинксы - это экзотические бесшерстные кошки с удивительно теплой кожей.',
-      traits: ['Бесшерстная', 'Энергичная', 'Социальная'],
-      origin: 'Канада',
-      size: 'Средний'
+      name: 'Русский язык',
+      icon: 'BookOpen',
+      color: 'bg-red-500',
+      grades: [6, 7, 8, 9],
+      description: 'Грамматика, орфография, сочинения и изложения',
+      image: '/img/ca8ad8cc-b2e4-49bc-8c89-a30cdf1da222.jpg',
+      tasks: 189
     },
     {
       id: 3,
-      name: 'Мейн-кун',
-      category: 'exotic',
-      image: '/img/1fe93ed2-0fda-4175-b867-1d55f369ca36.jpg',
-      description: 'Мейн-куны - крупные кошки с впечатляющими кисточками на ушах.',
-      traits: ['Крупная', 'Дружелюбная', 'Умная'],
-      origin: 'США',
-      size: 'Крупный'
+      name: 'Физика',
+      icon: 'Zap',
+      color: 'bg-purple-500',
+      grades: [7, 8, 9],
+      description: 'Механика, оптика, электричество и магнетизм',
+      image: '/img/f2077089-e477-4537-810a-c94afc1bd663.jpg',
+      tasks: 156
     },
     {
       id: 4,
-      name: 'Британская короткошёрстная',
-      category: 'british',
-      image: '/img/cea8344a-d57c-489d-9640-8d3fe0feaf34.jpg',
-      description: 'Плюшевые британцы с круглой мордочкой и густой шерстью.',
-      traits: ['Плюшевая шерсть', 'Независимая', 'Спокойная'],
-      origin: 'Великобритания',
-      size: 'Средний'
+      name: 'Химия',
+      icon: 'FlaskConical',
+      color: 'bg-green-500',
+      grades: [8, 9],
+      description: 'Химические реакции, формулы и уравнения',
+      image: '/img/f2077089-e477-4537-810a-c94afc1bd663.jpg',
+      tasks: 134
     },
     {
       id: 5,
-      name: 'Шотландская вислоухая',
-      category: 'british',
-      image: '/img/7ceac1f2-5141-4f1b-a08b-0e5692164c15.jpg',
-      description: 'Известны своими загнутыми ушками и милым выражением лица.',
-      traits: ['Вислоухая', 'Дружелюбная', 'Игривая'],
-      origin: 'Шотландия',
-      size: 'Средний'
+      name: 'История',
+      icon: 'Scroll',
+      color: 'bg-amber-600',
+      grades: [6, 7, 8, 9],
+      description: 'История России и всемирная история',
+      image: '/img/ca8ad8cc-b2e4-49bc-8c89-a30cdf1da222.jpg',
+      tasks: 167
     },
     {
       id: 6,
-      name: 'Русская голубая',
-      category: 'exotic',
-      image: '/img/3e821e44-cce8-4355-b5d0-532c23210191.jpg',
-      description: 'Элегантные кошки с серебристо-голубой шерстью и изумрудными глазами.',
-      traits: ['Серебристая', 'Тихая', 'Преданная'],
-      origin: 'Россия',
-      size: 'Средний'
+      name: 'География',
+      icon: 'Globe',
+      color: 'bg-teal-500',
+      grades: [6, 7, 8, 9],
+      description: 'Физическая и экономическая география',
+      image: '/img/ca8ad8cc-b2e4-49bc-8c89-a30cdf1da222.jpg',
+      tasks: 143
     },
     {
       id: 7,
-      name: 'Сиамская кошка',
-      category: 'oriental',
-      image: '/img/8a63ca8b-f269-4369-90af-af3c8b093879.jpg',
-      description: 'Изящные кошки с колор-пойнтовым окрасом и голубыми глазами.',
-      traits: ['Стройная', 'Разговорчивая', 'Активная'],
-      origin: 'Таиланд',
-      size: 'Средний'
+      name: 'Биология',
+      icon: 'Leaf',
+      color: 'bg-emerald-500',
+      grades: [6, 7, 8, 9],
+      description: 'Ботаника, зоология, анатомия человека',
+      image: '/img/f2077089-e477-4537-810a-c94afc1bd663.jpg',
+      tasks: 178
     },
     {
       id: 8,
-      name: 'Бенгальская кошка',
-      category: 'exotic',
-      image: '/img/c4816bf3-578e-48e6-b476-1520e5068f9d.jpg',
-      description: 'Дикая красота леопарда в домашней кошке с пятнистым окрасом.',
-      traits: ['Пятнистая', 'Атлетичная', 'Энергичная'],
-      origin: 'США',
-      size: 'Крупный'
+      name: 'Английский язык',
+      icon: 'Languages',
+      color: 'bg-indigo-500',
+      grades: [6, 7, 8, 9],
+      description: 'Грамматика, лексика, тексты и переводы',
+      image: '/img/ca8ad8cc-b2e4-49bc-8c89-a30cdf1da222.jpg',
+      tasks: 201
     },
     {
       id: 9,
-      name: 'Рэгдолл',
-      category: 'longhair',
-      image: '/img/bf8331b1-d271-4579-8663-c06115d17ddc.jpg',
-      description: 'Большие пушистые кошки, которые расслабляются в руках хозяина.',
-      traits: ['Пушистая', 'Послушная', 'Крупная'],
-      origin: 'США',
-      size: 'Крупный'
+      name: 'Обществознание',
+      icon: 'Users',
+      color: 'bg-orange-500',
+      grades: [6, 7, 8, 9],
+      description: 'Общество, право, экономика, политика',
+      image: '/img/ca8ad8cc-b2e4-49bc-8c89-a30cdf1da222.jpg',
+      tasks: 123
     },
     {
       id: 10,
-      name: 'Абиссинская кошка',
-      category: 'shorthair',
-      image: '/img/94e99c22-e7f6-45dc-b139-8925051786a8.jpg',
-      description: 'Древняя порода с тикированной шерстью золотистого цвета.',
-      traits: ['Тикированная', 'Активная', 'Любопытная'],
-      origin: 'Эфиопия',
-      size: 'Средний'
+      name: 'Литература',
+      icon: 'Library',
+      color: 'bg-rose-500',
+      grades: [6, 7, 8, 9],
+      description: 'Анализ произведений, сочинения, эссе',
+      image: '/img/ca8ad8cc-b2e4-49bc-8c89-a30cdf1da222.jpg',
+      tasks: 156
     },
     {
       id: 11,
-      name: 'Норвежская лесная',
-      category: 'longhair',
-      image: '/img/d34af63e-82a3-4e82-af7c-6f5aed08e5c3.jpg',
-      description: 'Крупные длинношёрстные кошки, приспособленные к суровому климату.',
-      traits: ['Длинношёрстная', 'Выносливая', 'Независимая'],
-      origin: 'Норвегия',
-      size: 'Крупный'
+      name: 'Информатика',
+      icon: 'Monitor',
+      color: 'bg-cyan-500',
+      grades: [7, 8, 9],
+      description: 'Программирование, алгоритмы, ИКТ',
+      image: '/img/66f765ea-6cb3-40a4-9fd1-089b9c5de0dd.jpg',
+      tasks: 89
     },
     {
       id: 12,
-      name: 'Ориентальная короткошёрстная',
-      category: 'oriental',
-      image: '/img/db437a10-563e-40c4-aaac-8c1cf83fa34b.jpg',
-      description: 'Стройные изящные кошки с большими ушами и множеством окрасов.',
-      traits: ['Стройная', 'Элегантная', 'Общительная'],
-      origin: 'Таиланд',
-      size: 'Средний'
-    },
-    {
-      id: 13,
-      name: 'Турецкая ангора',
-      category: 'longhair',
-      image: '/img/23f6a8aa-2d0b-406d-9b03-abe179e55c0d.jpg',
-      description: 'Грациозные белые кошки с шелковистой шерстью и разноцветными глазами.',
-      traits: ['Шелковистая', 'Грациозная', 'Игривая'],
-      origin: 'Турция',
-      size: 'Средний'
+      name: 'Геометрия',
+      icon: 'Triangle',
+      color: 'bg-violet-500',
+      grades: [7, 8, 9],
+      description: 'Планиметрия, стереометрия, доказательства',
+      image: '/img/66f765ea-6cb3-40a4-9fd1-089b9c5de0dd.jpg',
+      tasks: 167
     }
   ];
 
-  const categories = [
-    { id: 'all', name: 'Все породы', icon: 'Grid3X3', color: 'coral' },
-    { id: 'persian', name: 'Персидские', icon: 'Crown', color: 'mint' },
-    { id: 'exotic', name: 'Экзотические', icon: 'Sparkles', color: 'lavender' },
-    { id: 'british', name: 'Британские', icon: 'Flag', color: 'warm-yellow' },
-    { id: 'oriental', name: 'Восточные', icon: 'Star', color: 'coral' },
-    { id: 'longhair', name: 'Длинношёрстные', icon: 'Waves', color: 'mint' },
-    { id: 'shorthair', name: 'Короткошёрстные', icon: 'Circle', color: 'lavender' }
+  const grades = [
+    { id: 'all', name: 'Все классы', color: 'coral' },
+    { id: 6, name: '6 класс', color: 'mint' },
+    { id: 7, name: '7 класс', color: 'lavender' },
+    { id: 8, name: '8 класс', color: 'warm-yellow' },
+    { id: 9, name: '9 класс', color: 'coral' }
   ];
 
-  const filteredCats = useMemo(() => {
-    let filtered = selectedCategory === 'all' 
-      ? catBreeds 
-      : catBreeds.filter(cat => cat.category === selectedCategory);
+  const filteredSubjects = useMemo(() => {
+    let filtered = selectedGrade === 'all' 
+      ? subjects 
+      : subjects.filter(subject => subject.grades.includes(Number(selectedGrade)));
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(cat => 
-        cat.name.toLowerCase().includes(query) ||
-        cat.description.toLowerCase().includes(query) ||
-        cat.traits.some(trait => trait.toLowerCase().includes(query)) ||
-        cat.origin.toLowerCase().includes(query)
+      filtered = filtered.filter(subject => 
+        subject.name.toLowerCase().includes(query) ||
+        subject.description.toLowerCase().includes(query)
       );
     }
 
     return filtered;
-  }, [selectedCategory, searchQuery]);
+  }, [selectedGrade, searchQuery]);
 
-  const downloadImage = (imageUrl: string, filename: string) => {
-    const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const totalTasks = subjects.reduce((sum, subject) => sum + subject.tasks, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-coral/10 via-mint/10 to-lavender/20">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Header */}
-      <header className="relative overflow-hidden bg-white/80 backdrop-blur-sm border-b">
-        <div className="container mx-auto px-6 py-12">
+      <header className="relative overflow-hidden bg-white/90 backdrop-blur-sm border-b shadow-sm">
+        <div className="container mx-auto px-6 py-16">
           <div className="text-center animate-fade-in">
-            <h1 className="text-6xl font-bold text-gray-800 mb-4">
-              Галерея 
-              <span className="text-coral"> Котиков</span>
+            <div className="mb-6">
+              <Icon name="GraduationCap" size={64} className="mx-auto text-blue-600 mb-4" />
+            </div>
+            <h1 className="text-5xl font-bold text-gray-800 mb-4">
+              ГДЗ <span className="text-blue-600">Портал</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-              Откройте для себя удивительный мир кошачьих пород с возможностью просмотра и загрузки фотографий
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+              Готовые домашние задания для 6-9 классов по всем предметам. 
+              Подробные решения, объяснения и ответы для успешной учёбы
             </p>
             
             {/* Search Bar */}
@@ -198,10 +180,10 @@ const Index = () => {
               <Icon name="Search" size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Поиск по породам, характеристикам..."
+                placeholder="Поиск по предметам..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-3 w-full text-lg border-2 border-coral/20 focus:border-coral/50 rounded-full"
+                className="pl-10 pr-4 py-3 w-full text-lg border-2 border-blue-200 focus:border-blue-400 rounded-full"
               />
               {searchQuery && (
                 <Button
@@ -216,28 +198,30 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <div className="absolute top-0 right-0 w-64 h-64 bg-coral/10 rounded-full -translate-y-32 translate-x-32"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-mint/15 rounded-full translate-y-24 -translate-x-24"></div>
+        
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full opacity-20 -translate-y-48 translate-x-48"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-100 rounded-full opacity-20 translate-y-32 -translate-x-32"></div>
       </header>
 
-      {/* Navigation */}
-      <div className="bg-white/60 backdrop-blur-sm border-b sticky top-0 z-10">
+      {/* Grade Navigation */}
+      <div className="bg-white/80 backdrop-blur-sm border-b sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex flex-wrap justify-center gap-2 animate-scale-in">
-            {categories.map((category) => (
+          <div className="flex flex-wrap justify-center gap-3 animate-scale-in">
+            {grades.map((grade) => (
               <Button
-                key={category.id}
-                variant={selectedCategory === category.id ? 'default' : 'outline'}
-                onClick={() => setSelectedCategory(category.id)}
+                key={grade.id}
+                variant={selectedGrade === grade.id ? 'default' : 'outline'}
+                onClick={() => setSelectedGrade(grade.id)}
                 className={`${
-                  selectedCategory === category.id 
-                    ? `bg-${category.color} hover:bg-${category.color}/90 text-white` 
-                    : 'hover:bg-gray-50'
+                  selectedGrade === grade.id 
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                    : 'hover:bg-blue-50 border-blue-200'
                 } transition-all duration-200`}
                 size="sm"
               >
-                <Icon name={category.icon} size={16} />
-                {category.name}
+                <Icon name="BookOpen" size={16} />
+                {grade.name}
               </Button>
             ))}
           </div>
@@ -246,13 +230,13 @@ const Index = () => {
 
       {/* Search Results Info */}
       {searchQuery && (
-        <div className="bg-white/40 backdrop-blur-sm border-b">
+        <div className="bg-blue-50/80 backdrop-blur-sm border-b">
           <div className="container mx-auto px-6 py-3">
-            <div className="text-center text-gray-600">
-              {filteredCats.length > 0 ? (
+            <div className="text-center text-gray-700">
+              {filteredSubjects.length > 0 ? (
                 <>
-                  Найдено <span className="font-semibold text-coral">{filteredCats.length}</span> 
-                  {filteredCats.length === 1 ? ' порода' : filteredCats.length < 5 ? ' породы' : ' пород'} 
+                  Найдено <span className="font-semibold text-blue-600">{filteredSubjects.length}</span> 
+                  {filteredSubjects.length === 1 ? ' предмет' : filteredSubjects.length < 5 ? ' предмета' : ' предметов'} 
                   по запросу "<span className="font-semibold">{searchQuery}</span>"
                 </>
               ) : (
@@ -263,111 +247,84 @@ const Index = () => {
         </div>
       )}
 
-      {/* Gallery */}
+      {/* Subjects Grid */}
       <main className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredCats.map((cat, index) => (
+          {filteredSubjects.map((subject, index) => (
             <Card 
-              key={cat.id} 
-              className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white/90 backdrop-blur-sm border-0 shadow-lg animate-fade-in overflow-hidden"
+              key={subject.id} 
+              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-white/95 backdrop-blur-sm border-0 shadow-lg animate-fade-in overflow-hidden cursor-pointer"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
-              <div className="relative overflow-hidden">
+              <div className="relative overflow-hidden h-32">
                 <img
-                  src={cat.image}
-                  alt={cat.name}
-                  className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                  src={subject.image}
+                  alt={subject.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
+                <div className={`absolute inset-0 ${subject.color} opacity-80`}></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Icon name={subject.icon} size={32} className="text-white" />
+                </div>
                 <div className="absolute top-3 right-3">
-                  <Badge 
-                    variant="secondary" 
-                    className="bg-white/90 text-gray-700 text-xs"
-                  >
-                    {cat.origin}
+                  <Badge className="bg-white/90 text-gray-700 text-xs">
+                    {subject.tasks} задач
                   </Badge>
-                </div>
-                <div className="absolute top-3 left-3">
-                  <Badge 
-                    variant="secondary" 
-                    className={`${
-                      cat.size === 'Крупный' 
-                        ? 'bg-coral/90 text-white' 
-                        : 'bg-mint/90 text-white'
-                    } text-xs`}
-                  >
-                    {cat.size}
-                  </Badge>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute bottom-3 left-3 right-3">
-                    <Button
-                      onClick={() => downloadImage(cat.image, `${cat.name}.jpg`)}
-                      size="sm"
-                      className="w-full bg-white/90 text-gray-800 hover:bg-white text-sm"
-                    >
-                      <Icon name="Download" size={14} />
-                      Скачать
-                    </Button>
-                  </div>
                 </div>
               </div>
               
-              <CardContent className="p-4">
-                <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-1">{cat.name}</h3>
-                <p className="text-gray-600 mb-3 text-sm leading-relaxed line-clamp-2">{cat.description}</p>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  <Icon name={subject.icon} size={20} className={`${subject.color.replace('bg-', 'text-')}`} />
+                  {subject.name}
+                </CardTitle>
+              </CardHeader>
+              
+              <CardContent className="pt-0">
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  {subject.description}
+                </p>
                 
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {cat.traits.slice(0, 3).map((trait, idx) => (
+                <div className="flex flex-wrap gap-1 mb-4">
+                  {subject.grades.map((grade) => (
                     <Badge 
-                      key={idx} 
+                      key={grade} 
                       variant="outline" 
-                      className="border-coral/30 text-coral hover:bg-coral/10 text-xs"
+                      className="border-blue-200 text-blue-600 hover:bg-blue-50 text-xs"
                     >
-                      {trait}
+                      {grade} класс
                     </Badge>
                   ))}
                 </div>
 
-                <div className="flex gap-1">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 border-mint text-mint hover:bg-mint/10 text-xs"
-                  >
-                    <Icon name="Eye" size={14} />
-                    Просмотр
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 border-coral text-coral hover:bg-coral/10 text-xs"
-                    onClick={() => downloadImage(cat.image, `${cat.name}.jpg`)}
-                  >
-                    <Icon name="Download" size={14} />
-                    Скачать
-                  </Button>
-                </div>
+                <Button 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  size="sm"
+                >
+                  <Icon name="BookOpen" size={14} />
+                  Открыть ГДЗ
+                </Button>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {filteredCats.length === 0 && (
+        {filteredSubjects.length === 0 && (
           <div className="text-center py-16 animate-fade-in">
-            <Icon name="Search" size={48} className="mx-auto mb-4 text-gray-400" />
+            <Icon name="BookX" size={64} className="mx-auto mb-4 text-gray-400" />
             <h3 className="text-2xl font-semibold text-gray-600 mb-2">
-              {searchQuery ? 'Котики не найдены' : 'Выберите категорию'}
+              {searchQuery ? 'Предметы не найдены' : 'Выберите класс'}
             </h3>
             <p className="text-gray-500 mb-4">
               {searchQuery 
-                ? 'Попробуйте изменить запрос или выбрать другую категорию'
-                : 'Используйте фильтры выше для поиска пород'
+                ? 'Попробуйте изменить запрос или выбрать другой класс'
+                : 'Используйте фильтры выше для поиска ГДЗ'
               }
             </p>
             {searchQuery && (
               <Button 
                 onClick={() => setSearchQuery('')}
-                className="bg-coral hover:bg-coral/90"
+                className="bg-blue-600 hover:bg-blue-700"
               >
                 Очистить поиск
               </Button>
@@ -377,30 +334,62 @@ const Index = () => {
       </main>
 
       {/* Stats Section */}
-      <section className="bg-white/60 backdrop-blur-sm border-t">
+      <section className="bg-white/80 backdrop-blur-sm border-t">
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="animate-scale-in">
-              <div className="text-3xl font-bold text-coral mb-2">{catBreeds.length}</div>
-              <p className="text-gray-600 text-sm">Пород в галерее</p>
+              <div className="text-3xl font-bold text-blue-600 mb-2">{subjects.length}</div>
+              <p className="text-gray-600 text-sm">Предметов</p>
             </div>
             <div className="animate-scale-in" style={{ animationDelay: '0.1s' }}>
-              <div className="text-3xl font-bold text-mint mb-2">
-                {catBreeds.filter(cat => cat.category === 'exotic').length}
-              </div>
-              <p className="text-gray-600 text-sm">Экзотических</p>
+              <div className="text-3xl font-bold text-green-600 mb-2">4</div>
+              <p className="text-gray-600 text-sm">Класса</p>
             </div>
             <div className="animate-scale-in" style={{ animationDelay: '0.2s' }}>
-              <div className="text-3xl font-bold text-lavender mb-2">
-                {catBreeds.filter(cat => cat.size === 'Крупный').length}
-              </div>
-              <p className="text-gray-600 text-sm">Крупных пород</p>
+              <div className="text-3xl font-bold text-purple-600 mb-2">{totalTasks}</div>
+              <p className="text-gray-600 text-sm">Готовых заданий</p>
             </div>
             <div className="animate-scale-in" style={{ animationDelay: '0.3s' }}>
-              <div className="text-3xl font-bold text-coral mb-2">
-                {new Set(catBreeds.map(cat => cat.origin)).size}
+              <div className="text-3xl font-bold text-orange-600 mb-2">100%</div>
+              <p className="text-gray-600 text-sm">Бесплатно</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="container mx-auto px-6 py-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Почему выбирают наш ГДЗ портал?</h2>
+            <p className="text-blue-100 max-w-2xl mx-auto">
+              Мы предоставляем качественные решения и подробные объяснения для лучшего понимания материала
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Icon name="CheckCircle" size={32} />
               </div>
-              <p className="text-gray-600 text-sm">Стран происхождения</p>
+              <h3 className="text-xl font-semibold mb-2">Проверенные решения</h3>
+              <p className="text-blue-100">Все ответы проверены учителями и экспертами</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Icon name="Zap" size={32} />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Быстрый доступ</h3>
+              <p className="text-blue-100">Мгновенный поиск и удобная навигация</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <Icon name="Heart" size={32} />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Бесплатно</h3>
+              <p className="text-blue-100">Полный доступ ко всем материалам без оплаты</p>
             </div>
           </div>
         </div>
@@ -408,10 +397,51 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white">
-        <div className="container mx-auto px-6 py-8">
-          <div className="text-center">
-            <h4 className="text-xl font-semibold mb-2">Галерея Котиков</h4>
-            <p className="text-gray-400">Более {catBreeds.length} пород кошек со всего мира</p>
+        <div className="container mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h4 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <Icon name="GraduationCap" size={24} />
+                ГДЗ Портал
+              </h4>
+              <p className="text-gray-400 leading-relaxed">
+                Лучший помощник для школьников в выполнении домашних заданий
+              </p>
+            </div>
+            
+            <div>
+              <h5 className="font-semibold mb-4">Классы</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li>6 класс</li>
+                <li>7 класс</li>
+                <li>8 класс</li>
+                <li>9 класс</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h5 className="font-semibold mb-4">Популярные предметы</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li>Математика</li>
+                <li>Русский язык</li>
+                <li>Физика</li>
+                <li>Английский язык</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h5 className="font-semibold mb-4">Статистика</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li>{subjects.length} предметов</li>
+                <li>{totalTasks} заданий</li>
+                <li>4 класса</li>
+                <li>100% бесплатно</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 ГДЗ Портал. Образование должно быть доступным для всех.</p>
           </div>
         </div>
       </footer>
